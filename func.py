@@ -24,14 +24,14 @@ import logging
 def handler(ctx, data: io.BytesIO=None):
     try:
         cfg = ctx.Config()
-        loglevel = cfg["log-level"]
-        print("log level: " + loglevel)
+        log_level = cfg["log-level"]
+        print("log level: " + log_level)
     except Exception as ex:
         print('ERROR: Missing configuration log level', ex, flush=True)
         raise
 
     try:
-        logging.basicConfig(level=40)
+        logging.getLogger().setLevel(log_level)
         log = logging.getLogger("my-backup-logger")
         log.info("Hello, world")
         print("effective log level: " + str(log.getEffectiveLevel))

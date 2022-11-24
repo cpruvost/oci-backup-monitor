@@ -1,6 +1,6 @@
-# Function that logs the details of a Cloud event
+# Function that stores Oracle Cloud Events in Autonomous Db
 
-This function logs the details of a Cloud event.
+This function does insert of Oracle Cloud Backup Events in Autonomous Db (Autonomous JSON is the best choice cause an event = json)
 
 As you make your way through this tutorial, look out for this icon ![user input icon](./images/userinput.png).
 Whenever you see it, it's time for you to perform an action.
