@@ -34,7 +34,7 @@ def handler(ctx, data: io.BytesIO=None):
         logging.getLogger().setLevel(log_level)
         log = logging.getLogger("my-backup-logger")
         log.info("Hello, world")
-        print("effective log level: " + str(log.getEffectiveLevel))
+
         #Print Event Log
         body = json.loads(data.getvalue())
         eventtype = body["eventType"]
