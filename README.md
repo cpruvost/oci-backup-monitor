@@ -11,7 +11,15 @@ Before you deploy this sample function, make sure you have run step A, B and C o
 * A - Set up your tenancy
 * B - Create application
 * C - Set up your Cloud Shell dev environment
+* D - You need to know how to use [SODA with Autonomous DB](https://apexapps.oracle.com/pls/apex/f?p=133:180:12822046735455::::wid:831)
+* E - Look at 3 samples on [Oracle Github Functions Samples](https://github.com/oracle-samples/oracle-functions-samples/tree/master/samples) : oci-event-display-python, oci-sent-email-python, oci-load-file-into-adw-python, and oci-vault-get-secret-python
 
+As you see you need to have some experiences before using this Project because I do not explain the basics with functions. And mainly be carefull concerning the policies that allow Functions to access to Object Storage and Vault Secrets. 
+
+Ex : The Dynamic Group
+![function dyn group](./images/3-functions_dynamic_group.png)
+Ex : The Policies
+![function policies](./images/4-functions_policies.png)
 
 ## List Applications 
 Assuming your have successfully completed the prerequisites, you should see your 
@@ -19,7 +27,6 @@ application in the list of applications.
 ```
 fn ls apps
 ```
-
 
 ## Create or Update your Dynamic Group
 In order to use other OCI Services, your function must be part of a dynamic group. For information on how to create a dynamic group, refer to the [documentation](https://docs.cloud.oracle.com/iaas/Content/Identity/Tasks/managingdynamicgroups.htm#To).
@@ -47,6 +54,22 @@ push the image to OCIR, and deploy the function to Oracle Functions in your appl
 fn -v deploy --app <app-name>
 ```
 
+## Deploy the function configuration
+In Cloud Shell, run the *fn config* command to build the configuration of the function
+
+![user input icon](./images/userinput.png)
+```
+Ex : With app-name=CloudEventMonitor
+fn config function CloudEventMonitor oci-backup-monitor db-user admin
+fn config function CloudEventMonitor oci-backup-monitor dbpwd-cipher xxxxx
+fn config function CloudEventMonitor oci-backup-monitor ords-base-url https://xxxxx-myadw.adb.eu-frankfurt-1.oraclecloudapps.com/ords/
+fn config function CloudEventMonitor oci-backup-monitor db-schema admin
+fn config function CloudEventMonitor oci-backup-monitor smtp-username ocid1.user.oc1..aaaaaaaarihby2lfahxsli7zj3bb3b6wobiouko3ky7ianie3lodhle6pfha@ocid1.xxxxx
+fn config function CloudEventMonitor oci-backup-monitor smtp-password "xxxxx"
+fn config function CloudEventMonitor oci-backup-monitor smtp-host smtp.email.eu-frankfurt-1.oci.oraclecloud.com
+fn config function CloudEventMonitor oci-backup-monitor smtp-port 587
+fn config function CloudEventMonitor oci-backup-monitor log-level 40
+```
 
 ## Create the Cloud Event rule
 Create a Cloud Event rule on the console navigating to Application Integration > Event Service. Click *Create Rule*.
