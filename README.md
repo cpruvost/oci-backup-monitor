@@ -134,7 +134,7 @@ You have another possibility for monitoring the logs : Papertrail. To do that yo
 Learn how to configure basic observability for your function using metrics, alarms and email alerts:
 * [Basic Guidance for Monitoring your Functions](../basic-observability/functions.md)
 
-## Building a web interface in order to request the events or to build reports
+## Build a web interface in order to request the events or to build reports
 
 As we have stored the events in Autonomous with the json format, we can first create an Oracle Database View and then build the User Interface we want with APEX for ex. Nothing is more powerfull than that !
 
