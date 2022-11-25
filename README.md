@@ -83,6 +83,10 @@ Assign a display name and a description, customize the Rule Conditions or leave 
 ![create event rule](./images/2-create_event_rule.png)
 
 ## Test
+Choose the level of logging with the log level configuration. In configuration it will be stored as a String.
+![Python level log](./images/9-python_level_log.png)
+
+
 Go to the logs, you should see events from your compartment. You can create some backups like a File Storage Snapshot or a Block Volume Backup to generate an event.
 Note that it means you followed the documentation to see the logs with OCI logging.
 
