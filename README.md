@@ -55,64 +55,78 @@ fn -v deploy --app <app-name>
 ```
 
 ## Deploy the function configuration
-In Cloud Shell, run the *fn config* command to build the configuration of the function
+In Cloud Shell, run the *fn config* command to build the configuration of the function. Use your own values !
 
 ![user input icon](./images/userinput.png)
 ```
 Ex : With app-name=CloudEventMonitor
-fn config function CloudEventMonitor oci-backup-monitor db-user admin
-fn config function CloudEventMonitor oci-backup-monitor dbpwd-cipher xxxxx
+fn config function CloudEventMonitor oci-backup-monitor db-user admin (or another db user that you used for the demo)
+fn config function CloudEventMonitor oci-backup-monitor db_pwd_secret_id ocid1.vaultsecret.oc1.eu-frankfurt-1.xxxx
 fn config function CloudEventMonitor oci-backup-monitor ords-base-url https://xxxxx-myadw.adb.eu-frankfurt-1.oraclecloudapps.com/ords/
-fn config function CloudEventMonitor oci-backup-monitor db-schema admin
+fn config function CloudEventMonitor oci-backup-monitor db-schema admin (or another db user that you used for the demo)
 fn config function CloudEventMonitor oci-backup-monitor smtp-username ocid1.user.oc1..aaaaaaaarihby2lfahxsli7zj3bb3b6wobiouko3ky7ianie3lodhle6pfha@ocid1.xxxxx
-fn config function CloudEventMonitor oci-backup-monitor smtp-password "xxxxx"
+fn config function CloudEventMonitor oci-backup-monitor email_smtp_pwd_secret_id ocid1.vaultsecret.oc1.eu-frankfurt-1.xxxx
 fn config function CloudEventMonitor oci-backup-monitor smtp-host smtp.email.eu-frankfurt-1.oci.oraclecloud.com
 fn config function CloudEventMonitor oci-backup-monitor smtp-port 587
 fn config function CloudEventMonitor oci-backup-monitor log-level 40
 ```
 
+
+
 ## Create the Cloud Event rule
 Create a Cloud Event rule on the console navigating to Application Integration > Event Service. Click *Create Rule*.
 
-![user input icon](./images/1-create_event_rule.png)
+![create event rule](./images/1-create_event_rule.png)
 
 Assign a display name and a description, customize the Rule Conditions or leave them empty to match all events. In the *Actions* section, set the *Action type* as "Functions", select your *Function Compartment*, your *Function Application*, and your *Function ID*.
 
-![user input icon](./images/2-create_event_rule.png)
+![create event rule](./images/2-create_event_rule.png)
 
 ## Test
-Go to the logs, you should see events from your compartment. You can create some resource such as an Object Storage bucket to generate an event.
+Go to the logs, you should see events from your compartment. You can create some backups like a File Storage Snapshot or a Block Volume Backup to generate an event.
+Note that it means you followed the documentation to see the logs with OCI logging.
+
+![oci logging](./images/5-functions_oci_logging.png)
+
 For example:
 ```json
-event type: com.oraclecloud.objectstorage.createbucket
-compartment name: greg-verstraeten
+event type: com.oraclecloud.filestorage.createsnapshot
+compartment name: ChristophePruvost
 Full Cloud event json data:
 {
-    "eventType": "com.oraclecloud.objectstorage.createbucket",
-    "cloudEventsVersion": "0.1",
-    "eventTypeVersion": "2.0",
-    "source": "ObjectStorage",
-    "eventTime": "2019-12-12T22:25:08.502Z",
-    "contentType": "application/json",
-    "data": {
-        "compartmentId": "ocid1.compartment.oc1..aaaaaaaal66tw5k262fsjsrgdqan5cbbfxvoydbhxx5hijth2h3qlbwmtdlq",
-        "compartmentName": "greg-verstraeten",
-        "resourceName": "bucket-20191212-1425",
-        "resourceId": "/n/devrel/b/",
-        "availabilityDomain": "PHX-AD-2",
-        "additionalDetails": {
-            "bucketName": "bucket-20191212-1425",
-            "publicAccessType": "NoPublicAccess",
-            "namespace": "devrel",
-            "eTag": "47b12898-1925-449a-a761-7d1db57f0695"
-        }
+  "eventType" : "com.oraclecloud.filestorage.createsnapshot",
+  "cloudEventsVersion" : "0.1",
+  "eventTypeVersion" : "2.0",
+  "source" : "FileStorage",
+  "eventTime" : "2022-11-25T11:11:12Z",
+  "contentType" : "application/json",
+  "data" : {
+    "compartmentId" : "ocid1.compartment.oc1..aaaaaaaaffd4kyt4k3stukl57khwuodrzpi65v3gktkoskjvq7aul4ikosea",
+    "compartmentName" : "ChristophePruvost",
+    "resourceName" : "Snapshot-20221125-1111-02",
+    "resourceId" : "ocid1.snapshot.oc1.eu_frankfurt_1.aaaaaaaaaaaaaaawaaaaaaabdypqmztsmewxa4tpmq5gk5jnmzzgc3tlmz2xe5bngewwczbngiaaaaaa",
+    "availabilityDomain" : "AD2",
+    "freeformTags" : { },
+    "definedTags" : {
+      "Mandatory_Tags" : {
+        "Owner" : "oracleidentitycloudservice/christophe.pruvost@oracle.com",
+        "Schedule" : "OnDemand_UTC+1",
+        "CreatedOn" : "2022-11-25T11:11:03.067Z"
+      }
     },
-    "eventID": "fca0653f-85c5-9466-8812-001c51d338a4",
-    "extensions": {
-        "compartmentId": "ocid1.compartment.oc1..aaaaaaaal66tw5k262fsjsrgdqan5cbbfxvoydbhxx5hijth2h3qlbwmtdlq"
+    "additionalDetails" : {
+      "X-Real-Port" : 60131
     }
+  },
+  "eventID" : "4bf2c7f6-f724-4449-84bd-3fbca7627344",
+  "extensions" : {
+    "compartmentId" : "ocid1.compartment.oc1..aaaaaaaaffd4kyt4k3stukl57khwuodrzpi65v3gktkoskjvq7aul4ikosea"
+  }
 }
 ```
+You have another possibility for monitoring the logs : Papertrail. To do that you let the button enabled log on off for the function and you give the papertrail url to your application with : fn update app CloudEventMonitor --syslog-url tcp://logs4.papertrailapp.com:xxxx
+
+![papertrail logging](./images/6-functions_papertrail_logging.png)
 
 
 ## Monitoring Functions
@@ -120,3 +134,14 @@ Full Cloud event json data:
 Learn how to configure basic observability for your function using metrics, alarms and email alerts:
 * [Basic Guidance for Monitoring your Functions](../basic-observability/functions.md)
 
+## Building a web interface in order to request the events or to build reports
+
+As we have stored the events in Autonomous with the json format, we can first create an Oracle Database View and then build the User Interface we want with APEX for ex. Nothing is more powerfull than that !
+
+So first connect to Autonomous with SQLDeveloper and execute the j_backup_details_views.sql. Then you can request easily the view using SQL.
+
+![SQL Search](./images/7-sql_search.png)
+
+Then Build the Application you want to with APEX
+
+![APEX](./images/8-apex.png)
