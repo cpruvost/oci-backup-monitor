@@ -2,6 +2,8 @@
 
 This function does insert of Oracle Cloud Backup Events in Autonomous Db (Autonomous JSON is the best choice cause an event = json). This means you can build easily an APEX application to monitor all your backups on OCI in one place !
 
+![Architecture](./images/0-Architecture_Diagram.png)
+
 As you make your way through this tutorial, look out for this icon ![user input icon](./images/userinput.png).
 Whenever you see it, it's time for you to perform an action.
 
