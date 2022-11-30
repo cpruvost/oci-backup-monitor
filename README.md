@@ -1,6 +1,6 @@
-# Function that stores Oracle Cloud Backup Events (Storage Backups, Db Backups, ...) in Autonomous Db
+# Monitor Oracle Cloud Infrastructure Backups with Functions and Autonomous JSON.
 
-This function does insert of Oracle Cloud Backup Events in Autonomous Db (Autonomous JSON is the best choice cause an event = json). This means you can build easily an APEX application to monitor all your backups on OCI in one place !
+This function does insert of Oracle Cloud Backup Events in Autonomous Db (Autonomous JSON is the best choice cause an event = json). This means you can build easily an APEX application to monitor all your backups on OCI in one place ! Then as an OCI administrator you avoid that to have an email box full and you can build efficient Backup Reports with APEX.
 
 ![Architecture](./images/0-Architecture_Diagram.png)
 
